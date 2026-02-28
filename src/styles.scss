@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+/* Usando rutas relativas directas a node_modules si el import simple falla */
+@import "primeicons/primeicons.css";
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif);
+  background-color: var(--surface-ground, #f8f9fa);
+}
