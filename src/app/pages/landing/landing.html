@@ -1,0 +1,53 @@
+<div class="surface-ground px-4 py-8 md:px-6 lg:px-8">
+  <div class="flex flex-wrap lg:flex-nowrap align-items-center justify-content-between gap-5">
+    <div class="w-full lg:w-6">
+      <h1 class="text-6xl font-bold text-white mb-3">
+        Gestión Inteligente para tu <span class="text-blue-500">Empresa</span>
+      </h1>
+      <p class="text-gray-400 text-xl line-height-3 mb-5">
+        Optimiza tus procesos de Inventario, Finanzas y Recursos Humanos con la plataforma ERP más robusta diseñada en Angular 20.
+      </p>
+      <div class="flex gap-3">
+        <p-button label="Comenzar Ahora" icon="pi pi-rocket" size="large" (onClick)="goToLogin()"></p-button>
+        <p-button label="Saber más" icon="pi pi-info-circle" [outlined]="true" size="large"></p-button>
+      </div>
+    </div>
+
+    <div class="w-full lg:w-6 flex justify-content-center">
+      <div class="w-full h-20rem border-round-xl shadow-8 flex align-items-center justify-content-center"
+           style="background: linear-gradient(135deg, #4f058c 0%, #4f058c 100%);">
+        <i class="pi pi-chart-bar text-8xl text-white-alpha-40"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid mt-8">
+    <div class="col-12 text-center mb-5">
+      <h2 class="text-4xl font-semibold">Nuestros Módulos</h2>
+    </div>
+
+    <div class="col-12 md:col-4">
+      <div class="p-4 surface-card border-round shadow-2 hover:shadow-5 transition-duration-300" style="background: linear-gradient(135deg, #8c4405 0%, #f18616 100%);">
+        <i class="pi pi-money-bill text-4xl text-blue-500 mb-3"></i>
+        <div class="text-xl font-bold mb-2">Gestión Financiera</div>
+        <p class="line-height-3">Control total de ingresos, egresos y reportes contables en tiempo real.</p>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-4">
+      <div class="p-4 surface-card border-round shadow-2 hover:shadow-5 transition-duration-300" style="background: linear-gradient(135deg, #8c4405 0%, #f18616 100%);">
+        <i class="pi pi-box text-4xl text-blue-500 mb-3"></i>
+        <div class="text-xl font-bold mb-2">Inventario</div>
+        <p class=" line-height-3">Seguimiento preciso de stock, proveedores y almacenes automatizados.</p>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-4">
+      <div class="p-4 surface-card border-round shadow-2 hover:shadow-5 transition-duration-300" style="background: linear-gradient(135deg, #8c4405 0%, #f18616 100%);">
+        <i class="pi pi-users text-4xl text-blue-500 mb-3"></i>
+        <div class="text-xl font-bold mb-2">Recursos Humanos</div>
+        <p class=" line-height-3">Administración de nóminas, asistencia y expedientes de colaboradores.</p>
+      </div>
+    </div>
+  </div>
+</div>
