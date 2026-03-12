@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+/* Scrollbar personalizada para el Navbar si hay muchas rutas */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-round: 10px;
+}
+
+.transition-colors {
+  transition: background-color 0.2s, color 0.2s;
+}

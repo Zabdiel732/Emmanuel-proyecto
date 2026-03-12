@@ -1,1 +1,73 @@
-<p>home works!</p>
+<div class="flex min-h-screen">
+  <div class="flex flex-column bg-gray-900 w-15rem h-screen sticky top-0 border-right-1 border-gray-800">
+
+    <div class="flex align-items-center justify-content-center h-4rem border-bottom-1 border-gray-800">
+      <span class="text-xl font-bold text-blue-500 uppercase tracking-wider">{{ projectName }}</span>
+    </div>
+
+    <div class="flex-grow-1 overflow-y-auto py-3">
+      <ul class="list-none p-0 m-0">
+        <li *ngFor="let item of navItems" class="mb-1">
+          <a [routerLink]="item.route"
+             routerLinkActive="bg-blue-600 text-white"
+             class="flex align-items-center cursor-pointer p-3 hover:bg-gray-800 transition-duration-150 transition-colors no-underline text-gray-300 border-round-right-xl mx-2">
+            <i [class]="item.icon + ' mr-3 text-lg'"></i>
+            <span class="font-medium">{{ item.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="p-3 border-top-1 border-gray-800 bg-gray-900">
+      <div class="flex align-items-center justify-content-center py-2 border-round bg-gray-800 text-gray-500 text-sm">
+        <i class="pi pi-tag mr-2"></i>
+        <span>Versión {{ version }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-grow-1 overflow-y-auto">
+    <div class="surface-ground px-4 py-8 md:px-6 lg:px-8">
+      <div class="flex flex-wrap lg:flex-nowrap align-items-center justify-content-between gap-5">
+        <div class="w-full lg:w-6">
+          <h1 class="text-6xl font-bold text-white mb-3">
+            Bienvenido al <span class="text-blue-500">Dashboard</span>
+          </h1>
+          <p class="text-gray-400 text-xl line-height-3 mb-5">
+            Estás visualizando el panel de control principal de erpzabdiel. Aquí podrás gestionar todos tus módulos.
+          </p>
+        </div>
+        <div class="w-full lg:w-6 flex justify-content-center">
+          <div class="w-full h-20rem border-round-xl shadow-8 flex align-items-center justify-content-center"
+               style="background: linear-gradient(135deg, #4f058c 0%, #4f058c 100%);">
+            <i class="pi pi-chart-line text-8xl text-white-alpha-40"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid mt-8">
+        <div class="col-12 md:col-4">
+          <div class="p-4 surface-card border-round shadow-2 hover:shadow-5 transition-duration-300" style="background: linear-gradient(135deg, #8c4405 0%, #f18616 100%);">
+            <i class="pi pi-money-bill text-4xl text-white mb-3"></i>
+            <div class="text-xl font-bold mb-2 text-white">Gestión Financiera</div>
+            <p class="line-height-3 text-white-alpha-80">Control total de ingresos y egresos en tiempo real.</p>
+          </div>
+        </div>
+        <div class="col-12 md:col-4">
+          <div class="p-4 surface-card border-round shadow-2 hover:shadow-5 transition-duration-300" style="background: linear-gradient(135deg, #8c4405 0%, #f18616 100%);">
+            <i class="pi pi-box text-4xl text-white mb-3"></i>
+            <div class="text-xl font-bold mb-2 text-white">Inventario</div>
+            <p class="line-height-3 text-white-alpha-80">Seguimiento preciso de stock y almacenes.</p>
+          </div>
+        </div>
+        <div class="col-12 md:col-4">
+          <div class="p-4 surface-card border-round shadow-2 hover:shadow-5 transition-duration-300" style="background: linear-gradient(135deg, #8c4405 0%, #f18616 100%);">
+            <i class="pi pi-users text-4xl text-white mb-3"></i>
+            <div class="text-xl font-bold mb-2 text-white">Recursos Humanos</div>
+            <p class="line-height-3 text-white-alpha-80">Administración de nóminas y expedientes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
