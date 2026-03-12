@@ -37,6 +37,6 @@ export class LoginComponent {
     // Como pediste, omitimos la validación lógica por ahora
     // y redirigimos directamente al Home
     console.log('Datos capturados:', this.loginForm.value);
-    this.router.navigate(['/home']);
+    this.router.navigate(['/group-selection']);
   }
 }

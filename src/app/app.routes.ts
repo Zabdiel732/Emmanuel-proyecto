@@ -1,21 +1,35 @@
 import { Routes } from '@angular/router';
 
+// Importación de los componentes de las páginas
+import { LoginComponent } from './pages/login/login';
+import { RegisterComponent } from './pages/register/register';
+import { GroupSelectionComponent } from './pages/group-selection/group-selection';
+import { HomeComponent } from './pages/home/home';
+
 export const routes: Routes = [
   {
-    path: '',
-    loadComponent: () => import('./pages/landing/landing').then(m => m.LandingComponent)
-  },
-  {
     path: 'login',
-    loadComponent: () => import('./pages/login/login').then(m => m.LoginComponent)
+    component: LoginComponent
   },
   {
     path: 'register',
-    loadComponent: () => import('./pages/register/register').then(m => m.RegisterComponent)
+    component: RegisterComponent
+  },
+  {
+    path: 'group-selection',
+    component: GroupSelectionComponent
   },
   {
     path: 'home',
-    loadComponent: () => import('./pages/home/home').then(m => m.HomeComponent)
+    component: HomeComponent
   },
-  { path: '**', redirectTo: '' }
+  {
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    redirectTo: '/login'
+  }
 ];
