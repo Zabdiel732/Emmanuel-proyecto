@@ -1,12 +1,19 @@
+export interface TicketComment {
+  user: string;
+  text: string;
+  date: Date;
+}
+
 export interface Ticket {
   id: string;
   title: string;
   description: string;
   status: 'Pendiente' | 'En progreso' | 'Revisión' | 'Finalizado';
   assignedTo: string;
-  priority: 'Baja' | 'Media' | 'Alta';
+  createdBy: string;
+  priority: 'Alta' | 'Media' | 'Baja';
   createdAt: Date;
   limitDate: Date;
-  comments?: string[];
-  history?: string[];
+  comments: TicketComment[];
+  history: string[];
 }

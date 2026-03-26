@@ -1,29 +1,74 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
+import { Router, RouterModule } from '@angular/router';
+import { ChartModule } from 'primeng/chart';
 
 @Component({
   selector: 'app-group-selection',
   standalone: true,
-  imports: [CommonModule, CardModule, ButtonModule],
+  imports: [CommonModule, RouterModule, ChartModule],
   templateUrl: './group-selection.html',
   styleUrl: './group-selection.css'
 })
-export class GroupSelectionComponent {
-  // Definimos los grupos con sus colores de fondo (estilo LLM/Dark)
+export class GroupSelectionComponent implements OnInit {
+  currentUser = 'Zabdiel';
+  chartData: any;
+  chartOptions: any;
+
+  stats = {
+    total: 12,
+    pendientes: 4,
+    enProgreso: 5,
+    finalizados: 3
+  };
+
   groups = [
-    { id: 1, name: 'Equipo Dev', description: 'Desarrollo de erpzabdiel', color: '#4f058c', icon: 'pi pi-code' },
-    { id: 2, name: 'Soporte', description: 'Atención a clientes y tickets', color: '#05638c', icon: 'pi pi-headphones' },
-    { id: 3, name: 'UX / Diseño', description: 'Prototipado y experiencia', color: '#8c054a', icon: 'pi pi-palette' }
+    {
+      name: 'Magic Doors',
+      description: 'Gestión de accesos automáticos UTEQ.',
+      icon: 'pi pi-bolt',
+      color: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)' // Azul Profundo
+    },
+    {
+      name: 'ERP Zabdiel',
+      description: 'Control de tickets y módulos administrativos.',
+      icon: 'pi pi-server',
+      color: 'linear-gradient(135deg, #581c87 0%, #a855f7 100%)' // Púrpura
+    },
+    {
+      name: 'Investigación',
+      description: 'Estándares de seguridad S-SDLC y OWASP.',
+      icon: 'pi pi-shield',
+      color: 'linear-gradient(135deg, #064e3b 0%, #10b981 100%)' // Esmeralda
+    }
   ];
 
   constructor(private router: Router) {}
 
+  ngOnInit() {
+    this.initChart();
+  }
+
+  initChart() {
+    const documentStyle = getComputedStyle(document.documentElement);
+    this.chartData = {
+      labels: ['Pendientes', 'En Progreso', 'Finalizados'],
+      datasets: [{
+        data: [this.stats.pendientes, this.stats.enProgreso, this.stats.finalizados],
+        backgroundColor: ['#3b82f6', '#f59e0b', '#10b981'],
+        hoverBackgroundColor: ['#60a5fa', '#fbbf24', '#34d399'],
+        borderWidth: 0
+      }]
+    };
+
+    this.chartOptions = {
+      cutout: '75%',
+      plugins: { legend: { display: false } }
+    };
+  }
+
   selectGroup(groupName: string) {
-    console.log('Grupo seleccionado:', groupName);
-    // Redirigimos al Home (Dashboard del grupo)
+    console.log('Navegando al grupo:', groupName);
     this.router.navigate(['/home']);
   }
 }
