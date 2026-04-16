@@ -1,0 +1,25 @@
+/* src/app/pages/landing/landing.css */
+:host {
+  display: block;
+}
+
+.surface-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  transition: all 0.3s ease;
+}
+
+.surface-card:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-5px);
+}
+
+h1 {
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* Efecto de brillo suave para el contenedor del gráfico */
+.shadow-8 {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4) !important;
+}

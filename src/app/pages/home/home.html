@@ -1,0 +1,213 @@
+<div class="flex min-h-screen bg-gray-950 text-gray-100">
+  <div class="w-16rem bg-gray-900 border-right-1 border-gray-800 p-4 sticky top-0 h-screen">
+    <div class="text-xl font-bold text-blue-500 mb-6 uppercase tracking-widest">{{projectName}}</div>
+    <p-button label="Tablero" icon="pi pi-ticket" [text]="true" styleClass="w-full text-left text-white"></p-button>
+  </div>
+
+  <div class="flex-grow-1 p-5 overflow-y-auto">
+    <div class="bg-gray-900 p-4 border-round-xl mb-4 shadow-4 border-left-3 border-blue-500">
+      <div class="flex justify-content-between align-items-center mb-4">
+        <h2 class="m-0 font-bold">Gestión de Tareas</h2>
+        <div class="flex gap-2">
+          <p-selectButton [options]="viewOptions" [(ngModel)]="selectedView" optionLabel="label" optionValue="value"></p-selectButton>
+          <p-button label="Nuevo Ticket" icon="pi pi-plus" (onClick)="ticketForm = getEmptyTicket(); displayModal = true"></p-button>
+        </div>
+      </div>
+
+      <div class="flex flex-column gap-3">
+        <span class="p-input-icon-left w-full">
+          <i class="pi pi-search"></i>
+          <input pInputText placeholder="Buscar..." [(ngModel)]="filterSearch" (input)="updateColumns()" class="w-full" />
+        </span>
+
+        <div class="flex flex-wrap gap-2 align-items-center">
+          <span class="text-xs font-bold text-gray-600 uppercase mr-2">Asignación:</span>
+          <p-button label="Todos" (onClick)="filterAssignment = 'Todos'; updateColumns()" [outlined]="filterAssignment !== 'Todos'" size="small"></p-button>
+          <p-button label="Mis Tickets" icon="pi pi-user" (onClick)="filterAssignment = 'Mis tickets'; updateColumns()" [outlined]="filterAssignment !== 'Mis tickets'" size="small"></p-button>
+          <p-button label="Sin Asignar" icon="pi pi-user-minus" (onClick)="filterAssignment = 'Sin asignar'; updateColumns()" [outlined]="filterAssignment !== 'Sin asignar'" size="small" severity="secondary"></p-button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedView === 'kanban'" class="grid" cdkDropListGroup>
+      <div class="col-12 md:col-3" *ngFor="let col of [{l:'Pendiente', d:todo, c:'blue'}, {l:'En progreso', d:inProgress, c:'yellow'}, {l:'Revisión', d:review, c:'purple'}, {l:'Finalizado', d:done, c:'green'}]">
+        <div class="bg-gray-900 p-3 border-round-lg min-h-screen border-top-3" [style.border-color]="'var(--' + col.c + '-500)'">
+          <div class="text-xs font-bold mb-3 text-gray-500 uppercase">{{col.l}} ({{col.d.length}})</div>
+
+          <div cdkDropList [cdkDropListData]="col.d" (cdkDropListDropped)="drop($event, col.l)" class="flex flex-column gap-3 min-h-20rem">
+            <div *ngFor="let t of col.d" cdkDrag (click)="openEditModal(t)" class="bg-gray-800 p-3 border-round shadow-2 cursor-pointer border-left-3 border-blue-500 hover:bg-gray-750 transition-all">
+
+              <div class="text-sm font-bold mb-2 text-white">{{t.title}}</div>
+
+              <div class="flex justify-content-between align-items-center mb-3">
+                <p-tag [value]="t.priority" [severity]="getPrioritySeverity(t.priority)"></p-tag>
+                <span class="text-xs text-gray-500">{{t.assignedTo || 'Sin asignar'}}</span>
+              </div>
+
+              <div class="flex align-items-center pt-2 border-top-1 border-gray-700">
+                <i class="pi pi-calendar mr-2" [ngClass]="isOverdue(t.limitDate) ? 'text-red-500' : 'text-blue-400'" style="font-size: 0.8rem"></i>
+                <span class="text-xs font-medium" [ngClass]="{'text-red-500 font-bold': isOverdue(t.limitDate)}">
+                  {{t.limitDate | date:'dd MMM'}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedView === 'list'" class="bg-gray-900 border-round shadow-4 overflow-hidden border-1 border-gray-800">
+      <p-table
+        #dt
+        [value]="filteredTickets"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['title', 'assignedTo', 'status', 'priority']"
+        styleClass="p-datatable-sm p-datatable-gridlines"
+        [tableStyle]="{'min-width': '50rem'}">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="title">
+              <div class="flex align-items-center">
+                Título <p-sortIcon field="title"></p-sortIcon>
+                <p-columnFilter type="text" field="title" display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+            </th>
+
+            <th pSortableColumn="status">
+              <div class="flex align-items-center">
+                Estado <p-sortIcon field="status"></p-sortIcon>
+                <p-columnFilter field="status" matchMode="equals" display="menu" class="ml-auto">
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-select [ngModel]="value" [options]="statusOptions" (onChange)="filter($event.value)" placeholder="Elegir" optionLabel="label" optionValue="value">
+                      <ng-template let-option pTemplate="item">
+                        <p-tag [value]="option.value" severity="secondary"></p-tag>
+                      </ng-template>
+                    </p-select>
+                  </ng-template>
+                </p-columnFilter>
+              </div>
+            </th>
+
+            <th pSortableColumn="priority">
+              <div class="flex align-items-center">
+                Prioridad <p-sortIcon field="priority"></p-sortIcon>
+                <p-columnFilter field="priority" matchMode="equals" display="menu" class="ml-auto">
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-select [ngModel]="value" [options]="priorityOptions" (onChange)="filter($event.value)" placeholder="Elegir" optionLabel="label" optionValue="value">
+                      <ng-template let-option pTemplate="item">
+                        <p-tag [value]="option.value" [severity]="getPrioritySeverity(option.value)"></p-tag>
+                      </ng-template>
+                    </p-select>
+                  </ng-template>
+                </p-columnFilter>
+              </div>
+            </th>
+
+            <th pSortableColumn="assignedTo">
+              <div class="flex align-items-center">
+                Encargado <p-sortIcon field="assignedTo"></p-sortIcon>
+                <p-columnFilter type="text" field="assignedTo" display="menu" class="ml-auto" placeholder="Nombre..."></p-columnFilter>
+              </div>
+            </th>
+
+            <th pSortableColumn="limitDate">
+              <div class="flex align-items-center">
+                Límite <p-sortIcon field="limitDate"></p-sortIcon>
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-t>
+          <tr (click)="openEditModal(t)" class="cursor-pointer hover:bg-gray-800 transition-colors">
+            <td class="font-bold text-blue-400">{{t.title}}</td>
+            <td>
+              <p-tag [value]="t.status" severity="secondary"></p-tag>
+            </td>
+            <td>
+              <p-tag [value]="t.priority" [severity]="getPrioritySeverity(t.priority)"></p-tag>
+            </td>
+            <td>
+              <span *ngIf="t.assignedTo"><i class="pi pi-user text-xs mr-1"></i>{{t.assignedTo}}</span>
+              <span *ngIf="!t.assignedTo" class="text-gray-600">Sin asignar</span>
+            </td>
+            <td [ngClass]="{'text-red-500 font-bold': isOverdue(t.limitDate)}">
+              {{t.limitDate | date:'dd/MM/yy'}}
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="text-center p-4 text-gray-500 italic">
+              No se encontraron tickets con esos criterios de búsqueda.
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<p-dialog [(visible)]="displayModal" [header]="'Detalle del Ticket'" [modal]="true" [style]="{width: '750px'}" styleClass="p-fluid bg-gray-900 text-white">
+  <div class="grid">
+    <div class="col-12 md:col-7">
+      <div class="field mb-3">
+        <label class="text-xs font-bold text-gray-500 uppercase">Título</label>
+        <input pInputText [(ngModel)]="ticketForm.title" class="w-full" />
+      </div>
+      <div class="field mb-3">
+        <label class="text-xs font-bold text-gray-500 uppercase">Descripción</label>
+        <textarea pTextarea rows="4" [(ngModel)]="ticketForm.description" class="w-full"></textarea>
+      </div>
+      <div class="field">
+        <label class="text-xs font-bold text-gray-500 uppercase">Comentarios</label>
+        <div class="bg-gray-950 p-2 border-round mb-2 max-h-10rem overflow-y-auto border-1 border-gray-800">
+          <div *ngFor="let c of ticketForm.comments" class="text-xs mb-2 border-bottom-1 border-gray-900 pb-1">
+            <span class="text-blue-400 font-bold">{{c.user}}:</span> {{c.text}}
+            <div class="text-gray-600 italic" style="font-size: 0.6rem">{{c.date | date:'short'}}</div>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <input pInputText [(ngModel)]="newComment" placeholder="Añadir comentario..." />
+          <p-button icon="pi pi-send" (onClick)="addComment()"></p-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-5">
+      <div class="field mb-3">
+        <label class="text-xs font-bold text-gray-500 uppercase">Estado</label>
+        <p-select [options]="statusOptions" [(ngModel)]="ticketForm.status" optionLabel="label" optionValue="value"></p-select>
+      </div>
+      <div class="field mb-3">
+        <label class="text-xs font-bold text-gray-500 uppercase">Encargado</label>
+        <input pInputText [(ngModel)]="ticketForm.assignedTo" />
+      </div>
+      <div class="field mb-3">
+        <label class="text-xs font-bold text-gray-500 uppercase">Fecha Límite</label>
+        <p-datepicker [(ngModel)]="ticketForm.limitDate" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-datepicker>
+      </div>
+      <div class="field">
+        <label class="text-xs font-bold text-gray-500 uppercase">Historial de Cambios</label>
+        <div class="text-xs text-gray-400 bg-gray-950 p-2 border-round max-h-12rem overflow-y-auto border-1 border-gray-800 mt-1">
+          <div *ngFor="let h of ticketForm.history" class="mb-2 border-bottom-1 border-gray-900 pb-1 font-italic">• {{h}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-between w-full">
+      <p-button *ngIf="ticketForm.id" label="Eliminar" icon="pi pi-trash" severity="danger" [outlined]="true" (onClick)="deleteTicket()"></p-button>
+      <div class="flex gap-2">
+        <p-button label="Cerrar" icon="pi pi-times" severity="secondary" [text]="true" (onClick)="displayModal = false"></p-button>
+        <p-button label="Actualizar" icon="pi pi-save" (onClick)="saveTicket()"></p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '400px'}"></p-confirmDialog>

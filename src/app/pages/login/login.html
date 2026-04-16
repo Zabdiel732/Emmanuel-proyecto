@@ -1,0 +1,23 @@
+<div class="flex align-items-center justify-content-center min-h-screen surface-ground px-4">
+  <p-card header="Iniciar Sesión" [style]="{ width: '400px' }" class="shadow-5">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="flex flex-column gap-4">
+
+      <div class="flex flex-column gap-2">
+        <label for="email" class="font-bold">Correo Electrónico</label>
+        <input pInputText id="email" formControlName="email" placeholder="ejemplo@uteq.edu.mx" class="w-full" />
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="password" class="font-bold">Contraseña</label>
+        <p-password id="password" formControlName="password" [toggleMask]="true" [feedback]="false" styleClass="w-full" inputStyleClass="w-full"></p-password>
+      </div>
+
+      <p-button label="Ingresar" type="submit" icon="pi pi-sign-in" class="w-full" styleClass="w-full mt-2"></p-button>
+
+      <div class="text-center mt-3">
+        <span class="text-gray-500">¿No tienes cuenta? </span>
+        <a class="text-blue-500 font-bold cursor-pointer no-underline" (click)="false">Regístrate</a>
+      </div>
+    </form>
+  </p-card>
+</div>

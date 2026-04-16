@@ -1,0 +1,11 @@
+/* src/styles.css */
+@import "primeicons/primeicons.css";
+@import "primeflex/primeflex.css";
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgb(63, 4, 112); /* El fondo oscuro de tu diseño */
+  color: #ffffff;
+  font-family: var(--font-family, sans-serif);
+}
